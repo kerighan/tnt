@@ -1,0 +1,5 @@
+scikit-learn
+dill
+numpy
+scipy
+nearset>=0.0.4
