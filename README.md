@@ -122,4 +122,5 @@ Further information
 Information related to the cluster pruning neighbor search:
 
 https://nlp.stanford.edu/IR-book/html/htmledition/cluster-pruning-1.html
+
 https://dl.acm.org/doi/10.1145/1265530.1265545
