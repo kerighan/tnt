@@ -9,7 +9,7 @@ pip install tnt-learn
 
 TNT works by vectorizing your corpus using Scikit's popular Tf-Idf or Count vectorizers. An approximate k-nearest neighbor search is made when querying, using an algorithm inspired by the cluster pruning algorithm (see reference at the end of this page). Multiple indexes can be merged into one instance (named kTNT), to make searches more accurate, albeit slower.
 
-The algorithm works with datasets as large as millions of documents, without consuming much RAM. Its speed is some order of magnitudes faster, both in indexing and querying time than a KDTree. It is tailored for sparse and highly dimensional data such as text. It is not meant to replace a proper search engine: its purpose is to save you (a lot of) time and costs, when you only wish to explore your datasets or provide a temporary micro-service. It currently does not support insertion after index construction.
+The algorithm works with datasets as large as millions of documents, without consuming much RAM. Its speed is some order of magnitudes faster than a KDTree, both in indexing and querying time. It is tailored for sparse and highly dimensional data such as text. It is not meant to replace a proper search engine: its purpose is to save you (a lot of) time and costs, when you only wish to explore your datasets or provide a temporary micro-service. It does not currently support insertion after index construction.
 
 Example usage
 =============
@@ -40,7 +40,7 @@ You can avoid returning texts and distances, as list lookups are quite slow in P
 tnt.search("computer science", k=5, return_text=False, return_distance=False)
 ```
 
-CountVectorizer is the fastest vectorizer method, and works well for short texts such as tweets or emails. You can also use TfidfVectorizer. All additional keyword parameters are automatically passed to the vectorizer:
+CountVectorizer is the fastest vectorizer method, and works well for short texts such as tweets or emails. You can also use TfidfVectorizer or other sklearn-like algorithms. All additional keyword parameters are automatically passed to the vectorizer:
 
 ```python
 tnt = TNT(vectorizer="tfidf", ngram_range=(0, 1), stop_words={"french"})
@@ -76,7 +76,7 @@ tnt.search("BLM")
 Grow a forest of TNTs
 ---------------------
 
-If accuracy is paramount, you can build a kTNT instance, which is like a forest of TNTs: using the same vectorizer, multiple indexes are built and queried. This is of course a trade-off between accuracy and speed.
+If accuracy is paramount, you can build a kTNT instance, which can be thought of as a forest of TNTs: using the same vectorizer, multiple indexes are built and queried. This is of course a trade-off between accuracy and speed.
 
 ```python
 from sklearn.datasets import fetch_20newsgroups
@@ -95,7 +95,7 @@ tnt = load("ktnt.p")
 tnt.search("here we go again!")
 ```
 
-kTNT is the recommended way to use TNT when dealing with very short documents such as tweets, as picking sqrt(N) documents is sometimes not enough to capture uncommon words. Using k=2 or 3 can ensure that all semantically reasonable queries get some match with its "leaders" (see details on the cluster pruning algorithm at the end of this page to understand this sentence).
+kTNT is the recommended way to use TNT when dealing with very short documents such as tweets, as picking sqrt(N) documents is sometimes not enough to capture short texts consisting of uncommon words. Using k=2 or 3 can ensure that all semantically reasonable queries get some match with its "leaders" (see details on the cluster pruning algorithm at the end of this page to understand this sentence).
 
 depth
 -----
